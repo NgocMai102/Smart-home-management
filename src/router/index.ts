@@ -9,7 +9,7 @@ import ReportView from "../page/report/ReportView.vue";
 const routes = [{
   path: "",
   name: "AppLayout",
-  // redirect: { name: "HomeView" },
+  redirect: { name: "HomeView" },
   component: AppLayout,
   children: [
     {

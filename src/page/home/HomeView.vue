@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineComponent } from "vue";
-import LineChart from "./LineChart.vue";
+import LineChart from "./chart/LineChart.vue";
 import WeatherCard from "./WeatherCard.vue";
 import HomeCard from "./HomeCard.vue";
 

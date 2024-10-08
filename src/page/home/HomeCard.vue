@@ -74,7 +74,7 @@ const airConditionActive = ref(false)
 }
 
 .rotate {
-  animation: rotation 2s infinite linear;
+  animation: rotation 1s infinite linear;
 }
 
 @keyframes rotation {
