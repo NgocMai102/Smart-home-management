@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import {defineComponent, onDeactivated, ref} from "vue";
+import { Search } from '@element-plus/icons-vue'
+
+const input = ref('');
 
 const temperature = ref<number>();
 const humidity = ref<number>();
@@ -92,6 +95,16 @@ function handleCurrentChange(val: number, filteredData = data.value, page = curr
 <template>
   <div>
     <h1 class="m-6 text-4xl font-semibold text-center text-[var(--paragraph-color-1)]">Thống kê nhiệt độ - độ ẩm - ánh sáng</h1>
+
+    <div class = "text-right mr-32 mb-6">
+      <el-input
+          v-model="input"
+          style="width: 240px"
+          placeholder="Tìm kiếm"
+          :prefix-icon="Search"
+      />
+    </div>
+
     <div class = "flex justify-center items-center">
       <el-table :data="tableData" stripe max-height="450" style="width: 80%"
                 :table-layout="tableLayout"

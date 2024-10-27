@@ -3,6 +3,7 @@ import { defineComponent, ref } from "vue";
 import LineGraph  from "./LineGraph.vue";
 import WeatherCard from "./WeatherCard.vue";
 import HomeCard from "./HomeCard.vue"
+import axios from 'axios'
 
 const labels = ref<string[]>(["00:00", "01:00", "02:00", "03:00", "04:00", "05:00",
   "06:00", "07:00", "08:00", "09:00", "10:00", "11:00",
@@ -16,6 +17,14 @@ const light = ref(100);
 const temperature = ref(30);
 const humidity = ref(70);
 
+async function fetchData() {
+  const response = await axios.get('http://localhost:3000/data')
+  const data = response.data
+  light.value = data.light
+  temperature.value = data.temperature
+  humidity.value = data.humidity
+}
+
 </script>
 
 <template>
@@ -28,7 +37,7 @@ const humidity = ref(70);
       <HomeCard />
     </div>
 
-    <div class = "row-start-2 row-span-2 col-span-3">
+    <div class = "row-start-2 row-span-3 col-span-3 h-[100%] w-[100%]">
       <LineGraph :light-data=lightData :humidity-data=humidityData :temperature-data=temperatureData :labels=labels />
     </div>
   </div>

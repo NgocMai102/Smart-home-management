@@ -1,11 +1,19 @@
 // src/components/LineChart.vue
 <template>
-  <div class="ml-2 max-w-4xl w-full h-[430px] mt-6 bg-white rounded-2xl shadow md:p-6">
+  <div class="background ml-5 mt-4 mr-1">
     <canvas ref="lineGraphCanvas" ></canvas>
+    <div class = "mt-2.5 mr-2 mb-0.5 text-right">
+      <router-link to="/report">
+        <el-button type="primary" :icon="WarningFilled" round>Xem chi tiết</el-button>
+      </router-link>
+
+    </div>
+
   </div>
 </template>
 
 <script setup lang="js">
+import { WarningFilled } from '@element-plus/icons-vue'
 
 import Chart from 'chart.js/auto'
 import {defineComponent, onMounted, watch, ref, reactive, defineProps} from 'vue';
@@ -111,5 +119,20 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
+.background {
+  background-color: var(--neutral-color-5);
+
+  border-radius: 20px;
+  padding: 10px;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  box-shadow: 4px 4px 6px 0px rgba(66, 66, 66, 0.34);
+  transition: 0.3s;
+}
 
 </style>

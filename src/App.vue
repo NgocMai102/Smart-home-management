@@ -1,8 +1,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-import { sidebarWidth } from "./components/sidebar/state";
-import AppLayout from "./layouts/AppLayout.vue";
-import SidebarModel from "@/components/sidebar/SidebarModel.vue";
+import { sidebarWidth } from "@/view/components/sidebar/state";
+import AppLayout from "@/view/layouts/AppLayout.vue";
+import SidebarModel from "@/view/components/sidebar/SidebarModel.vue";
 
 
 export default defineComponent({
