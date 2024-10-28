@@ -18,8 +18,5 @@ pool.on('error', (err) => {
     process.exit(-1);
 });
 
-pool.query(`SELECT * FROM sensor_data`, (err, res) => {
-    console.log(err, res);
-    pool.end();
-});
+export default pool;
 

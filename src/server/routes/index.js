@@ -1,8 +1,9 @@
-import express from 'express';
-const route1 = express.Router();
+import express from "express";
+import sensorsRouter from "./sensors.route.js";
+import devicesRouter from "./devices.route.js";
 
-import router from './sensors.route.js';
+const router = express.Router();
+router.use("/sensor", sensorsRouter);
+router.use("/device", devicesRouter);
 
-route1.use('/sensors', router);
-
-export default route1;
+export default router;

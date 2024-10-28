@@ -8,11 +8,14 @@ import {sensorModel} from "./server/models/sensors.model.js";
 
 const app = express();
 const port = 3000;
+const mqtt_broker_url = "mqtt://localhost:1883";
+const server = http.createServer(app)
+const io = new Server(server)
 
 app.use(express.json());
 app.use('/', routes);
 
-const mqttClient = mqtt.connect('mqtt://localhost:1883');
+const mqttClient = mqtt.connect(mqtt_broker_url);
 mqttClient.on('connect', () => {
     console.log('Connected to MQTT broker');
     mqttClient.subscribe('data/sensor', (err) => {
@@ -34,24 +37,32 @@ mqttClient.on('message', async (topic, message) => {
     }
 });
 
-app.get('/', (req, res) => {
-    console.log("hello, world");
-    res.status(200).send('Data received');
-});
+app.post("/publish", (req, res) => {
+    const { topic, message } = req.body;
 
-app.get('/data', async (req, res) => {
-    console.log("hello, world");
-    res.status(200).send('Data pushed');
-})
+    if (!topic || !message) {
+        return res.status(400).send("Topic and message are required.");
+    }
+
+    mqttClient.publish(topic, message, (err) => {
+        if (err) {
+            console.log("Failed to publish message:", err);
+            res.status(500).send("Failed to publish message.");
+        } else {
+            console.log(`Published message "${message}" to topic "${topic}"`);
+            res.send(`Message "${message}" published to topic "${topic}"`);
+        }
+    });
+});
 
 
 function convertStringToObject(str) {
     const values = str.split(',');
 
     return {
-        temperature: parseFloat(values[1]),
-        humidity: parseFloat(values[2]),
-        light: parseFloat(values[3])
+        temperature: parseFloat(values[0]),
+        humidity: parseFloat(values[1]),
+        light: parseFloat(values[2])
     };
 }
 

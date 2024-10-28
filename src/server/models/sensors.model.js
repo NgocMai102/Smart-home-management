@@ -10,23 +10,14 @@ export const createSensorDataTable = async () => {
     )`;
 };
 
-export const createDeviceDataTable = async () => {
-    const query = `CREATE TABLE IF NOT EXISTS device_data (
-        id SERIAL PRIMARY KEY,
-        device VARCHAR(255),
-        state NUMERIC,
-        timestamp TIMESTAMP DEFAULT NOW()
-    )`;
-}
 createSensorDataTable();
 
 
 
 const getAllSensorData = async () => {
     try{
-        const result = pool.query(`SELECT * FROM sensor_data`);
-        console.log(result.rows);
-        return await result.rows;
+        const result = await pool.query(`SELECT * FROM sensor_data`);
+        return result.rows;
     } catch (error) {
         throw error;
     }
@@ -34,15 +25,16 @@ const getAllSensorData = async () => {
 
 const getSensorDataByTime = async (time) => {
     try{
-        const result = pool.query(`SELECT * FROM sensor_data WHERE timestamp = $1'`, [time]);
+        const result = await pool.query(`SELECT * FROM sensor_data WHERE timestamp LIKE $1%'`, [time]);
+        return result.rows;
     } catch (error) {
         throw error;
     }
 }
 
-const createSensorData = async (temperature, humidity, light) => {
+const addSensorData = async (temperature, humidity, light) => {
     try {
-        const result = pool.query(`INSERT INTO sensor_data (temperature, humidity, light) VALUES ($1, $2, $3)`, [temperature, humidity, light]);
+        const result = await pool.query(`INSERT INTO sensor_data (temperature, humidity, light) VALUES ($1, $2, $3)`, [temperature, humidity, light]);
         return result.rows[0];
     } catch (error) {
         throw error;
@@ -51,7 +43,61 @@ const createSensorData = async (temperature, humidity, light) => {
 
 const getSensorDataPagination = async (itemsPerPage, page) => {
     try {
-        const result = pool.query(`SELECT * FROM sensor_data LIMIT $1 OFFSET {($2 - 1) * $1}`, [itemsPerPage, page]);
+        const result = await pool.query(`SELECT * FROM device_data LIMIT $1 OFFSET $2`, [itemsPerPage, (page - 1) * itemsPerPage]);
+        return result.rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const filterTemperatureIncrease = async () => {
+    try {
+        const result = await pool.query(`SELECT * FROM sensor_data ORDER BY temperature ASC`);
+        return result.rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const filterTemperatureDecrease = async () => {
+    try {
+        const result = await pool.query(`SELECT * FROM sensor_data ORDER BY temperature DESC`);
+        return result.rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const filterHumidityIncrease = async () => {
+    try {
+        const result = await pool.query(`SELECT * FROM sensor_data ORDER BY humidity ASC`);
+        return result.rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const filterHumidityDecrease = async () => {
+    try {
+        const result = await pool.query(`SELECT * FROM sensor_data ORDER BY humidity DESC`);
+        return result.rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const filterLightIncrease = async () => {
+    try {
+        const result = await pool.query(`SELECT * FROM sensor_data ORDER BY light ASC`);
+        return result.rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
+const filterLightDecrease = async () => {
+    try {
+        const result = await pool.query(`SELECT * FROM sensor_data ORDER BY light DESC`);
         return result.rows;
     } catch (error) {
         throw error;
@@ -61,7 +107,19 @@ const getSensorDataPagination = async (itemsPerPage, page) => {
 export const sensorModel = {
     getAllSensorData,
     getSensorDataByTime,
-    createSensorData,
-    getSensorDataPagination
+    addSensorData,
+    getSensorDataPagination,
+    filterLightIncrease,
+    filterLightDecrease,
+    filterTemperatureIncrease,
+    filterTemperatureDecrease,
+    filterHumidityIncrease,
+    filterHumidityDecrease
 }
+
+//----------------------
+
+
+
+
 
